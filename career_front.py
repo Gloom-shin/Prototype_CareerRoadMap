@@ -38,7 +38,6 @@ if 'learning_activity' not in st.session_state:
 if 'learning_duration' not in st.session_state:
     st.session_state.learning_duration = 1  # 기본값 설정
 
-print(1)
 def step_1():
     st.header("1단계: 목표 설정")
     st.session_state.company_name = st.text_input("지원 회사명 (예: 네이버)", st.session_state.company_name)
@@ -74,21 +73,23 @@ def step_2():
 
     st.session_state.selected_skills_text = st.text_area("원하는 핵심 요구사항을 1가지 이상 입력해주세요. (예시: Python, 데이터 시각화)")
     if st.button("분석"):
-        if len(st.session_state.selected_skills_text.strip()) > 0:
+        print(st.session_state.selected_skills_text)
+        if len(st.session_state.selected_skills_text) > 4:
             with st.spinner("분석 하는 중입니다...답변 생성이 완료 되면 다음 버튼이 생성됩니다."):
                 response = openai.chat.completions.create(
                     model="gpt-4o",
                     messages=[
                         {"role" : "user", "content": f"""
-                             선택한 요구사항{st.session_state.selected_skills_text}을 기반으로 커리어 활동을 **경험 쌓기**와 **학습** 두 가지 카테고리로 각각 5가지종류씩 나누어 사용자에게 제시합니다. 이때 각 활동의 예상 활동기간(개월)도 같이 제시합니다.
+                                선택한 요구사항 {st.session_state.selected_skills_text} 을 기반으로 커리어 활동을 **경험 쌓기**와 **학습** 두 가지 카테고리로 각각 5가지종류씩 나누어 사용자에게 제시합니다. 이때 각 활동의 예상 활동기간(개월)도 같이 제시합니다.
                                 제시전에는 무조건 이렇게 대답합니다.
-                               "경험쌓기활동과 학습활동 각각 1개씩 선택해주시고 몇 개월 동안 진행할 계획인지 알려주세요."
+                                경험쌓기활동과 학습활동 각각 1개씩 선택해주시고 몇 개월 동안 진행할 계획인지 알려주세요.
                             """
                         }
                     ],
                     max_tokens=3000
                 )
             st.session_state.core_skills = response.choices[0].message.content
+            print(response)
             st.session_state.step = 3
             st.button("다음 단계로 진행")
         else:
