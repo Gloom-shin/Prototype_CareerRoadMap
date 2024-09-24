@@ -8,7 +8,6 @@ client.api_key = os.getenv("OPENAI_API_KEY")
 assistant_id = os.getenv("OPENAI_ASSISTANT_ID")
 
 
-
 def get_ai_message(user_question):
     if 'my_assistants' not in st.session_state:
         st.session_state.my_assistants = client.beta.assistants.retrieve(assistant_id)
@@ -46,11 +45,6 @@ st.caption("대화 추천4 : 금융 영업직으로 커리어를 쌓고싶어")
 # 메시지 내용 저장 
 if 'message_list' not in st.session_state:
     st.session_state.message_list = []
-for message in st.session_state.message_list:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
-
-
 for message in st.session_state.message_list:
     with st.chat_message(message["role"]):
         st.write(message["content"])
